@@ -1,0 +1,16 @@
+{
+    "links": [
+          {
+            "title": "THIS IS GOOGLE",
+            "href": "https://www.google.com",
+            "icon": "fa-at",
+            "target": "_blank"
+          },
+          {
+            "title": "Go Places",
+            "href": "http://www.lonelyplanet.com",
+            "icon": "mail_outline",
+            "target": "_blank"
+          }
+        ]
+}
