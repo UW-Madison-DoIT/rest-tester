@@ -23,12 +23,15 @@ public class RestTesterController{
 
     @RequestMapping(value="/")
     public @ResponseBody void getJson(HttpServletRequest request, HttpServletResponse response){
-           String json = env.getProperty("link");
-           try{
-               JSONObject jsonObject = new JSONObject(json);
-    }catch(Exception e){
-        logger.warn(e.getMessage());
-    }
-
+ try {
+          JSONObject responseObj = new JSONObject();
+          responseObj.put("status", "up");
+          response.getWriter().write(responseObj.toString());
+          response.setContentType("application/json");
+          response.setStatus(HttpServletResponse.SC_OK);
+        } catch (Exception e) {
+            logger.error("Issues happened while trying to write Status", e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 }
