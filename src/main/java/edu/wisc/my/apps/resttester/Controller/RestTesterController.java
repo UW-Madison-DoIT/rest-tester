@@ -2,6 +2,7 @@ package edu.wisc.my.apps.resttester.Controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +12,20 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.StringWriter;
+
 import java.io.File;
-import java.io.IOException;
-import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.InputStream;
+
+import org.springframework.util.ResourceUtils;
+import java.io.ByteArrayOutputStream;
+import java.io.BufferedInputStream;
+
 
 @Controller
 public class RestTesterController{
@@ -32,37 +44,24 @@ public class RestTesterController{
           logger.error(linkLocation);
 
 	//Get file from resources folder
-	ClassLoader classLoader = getClass().getClassLoader();
-	if(classLoader==null){
-        logger.error("No class loader");
-    }
+	ClassLoader classLoader = this.getClass().getClassLoader();
+    
+    File filio = ResourceUtils.getFile("classpath:config/jsonToReturn.json");
+    InputStream is = new FileInputStream(filio);
+    StringWriter writer = new StringWriter();
+    BufferedInputStream bis = new BufferedInputStream(is);
+    ByteArrayOutputStream buf = new ByteArrayOutputStream();
+   int i = bis.read();
+while(i != -1) {
+    buf.write((byte) i);
+    i = bis.read();
+}
+// StandardCharsets.UTF_8.name() > JDK 7
 
-    if(classLoader.getResource(linkLocation)==null){
-        logger.error("Cannot get resource at " + linkLocation);
-    }
-
-    if(classLoader.getResource(linkLocation).getFile()==null){
-        logger.error("Screwy step 3");
-    }
-    File file = new File(classLoader.getResource(linkLocation).getFile());
-
-	try (Scanner scanner = new Scanner(file)) {
-
-		while (scanner.hasNextLine()) {
-			String line = scanner.nextLine();
-			result.append(line).append("\n");
-		}
-
-		scanner.close();
-
-	} catch (IOException e) {
-		e.printStackTrace();
-	}
-          String links = result.toString();
-          
-          JSONObject obj = new JSONObject(links);
-          JSONObject responseObj = new JSONObject();
-          responseObj.put("status", "up");
+    JSONObject responseObj= new JSONObject(buf.toString());
+    
+    logger.error("Filio " + filio.exists());
+ 
           response.getWriter().write(responseObj.toString());
           response.setContentType("application/json");
           response.setStatus(HttpServletResponse.SC_OK);
