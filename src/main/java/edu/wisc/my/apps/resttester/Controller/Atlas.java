@@ -1,6 +1,7 @@
 package edu.wisc.my.apps.resttester.Controller;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import org.apache.commons.lang3.StringUtils;
 import java.util.TreeSet;
 
@@ -14,6 +15,18 @@ public class Atlas {
     public Atlas(){
 
     }
+
+    public void popValue(String value){
+        for (Iterator<Distance> iterator = distances.iterator(); iterator.hasNext();) {
+            Distance d = iterator.next();
+            if(value.equals(d.getPointA())
+            || value.equals(d.getPointB())){
+               iterator.remove();
+             }     
+        }
+        keys.remove(value);
+}
+  
 
     public Atlas(Atlas atlas, String fromHere) {
         ArrayList<Distance> distancesFromHere = new ArrayList();
@@ -31,9 +44,6 @@ public class Atlas {
     }
 
    public TreeSet getKeys(){
-       for(String key: this.keys){
-           System.out.println(key);
-       }
        return this.keys;
    }
 
@@ -91,7 +101,6 @@ public class Atlas {
                retVal = d;
            }
        }
-    System.out.println (startingPoint + " is far from " + getOther(retVal) + " " + retVal.getMiles());   
     return retVal;
    }
 
@@ -105,7 +114,6 @@ public class Atlas {
                retVal = d;
            }
        }
-    System.out.println (startingPoint + " is near " + getOther(retVal) + " " + retVal.getMiles());   
     return retVal;
    }
 

@@ -24,12 +24,15 @@ try{
         for(Distance d: roadtrip.getDistances()){
             at.canAdd(d);
         }
-        Distance r = at.getDistance("JFK", "AL");
-        System.out.println("HERE>>" + r.toString());
+        TripList tl = new TripList(at.getKeys(), at);
+        tl.setStartingPoint("GF");
+        tl.makeNearestNeighborList();
+        TripLog tripLog = new TripLog(tl.getDistances(), "GF");
+        System.out.println(tripLog.toString());
+       
         Iterator it = at.getKeys().iterator();
         while(it.hasNext()){
-         String item = (String) it.next();
-          System.out.println("START AT " + item);  
+         String item = (String) it.next();  
           at.setStartingPoint(item);
           at.getNearestNeighbor(item);
           at.getFarthestNeighbor(item);

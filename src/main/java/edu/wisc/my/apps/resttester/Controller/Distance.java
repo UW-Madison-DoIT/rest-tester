@@ -33,6 +33,16 @@ public class Distance{
         return this.pointB;
     }
 
+    public String getOther(String startingPoint) {
+        if(startingPoint.equals(pointA)){
+            return pointB;
+        }
+        if(startingPoint.equals(pointB)){
+            return pointA;
+        }
+        return null;
+    }
+
     private void setPoints(){
         
         String[] points = this.getKey().split("\\|");
