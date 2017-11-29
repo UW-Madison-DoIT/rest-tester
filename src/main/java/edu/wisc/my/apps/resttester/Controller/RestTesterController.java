@@ -59,6 +59,7 @@ while(i != -1) {
 // StandardCharsets.UTF_8.name() > JDK 7
 
     JSONObject responseObj= new JSONObject(buf.toString());
+    PrezGraveRoadTripController ptg = new PrezGraveRoadTripController(responseObj);
     
     logger.error("Filio " + filio.exists());
  
